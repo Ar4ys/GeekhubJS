@@ -133,6 +133,66 @@ class Perform {
 
 		return nextPerform
 	}
+
+	static resolve(value) {
+		return new Perform(resolve => resolve(value))
+	}
+
+	static reject(reason) {
+		return new Perform((_, reject) => reject(reason))
+	}
+
+	static all(iterable) {
+		return new Perform((resolve, reject) => {
+			const result = []
+			let resolvedPromisesCount = 0
+			let promiseOrder = 0
+			for (const perform of iterable) {
+				perform.then(value => {
+					result[promiseOrder] = value
+					resolvedPromisesCount++
+					if (resolvedPromisesCount === promiseOrder)
+						resolve(result)
+				}, reject)
+				promiseOrder++
+			}
+		})
+	}
+
+	static allSettled(iterable) {
+		return new Perform((resolve, reject) => {
+			const result = []
+			let resolvedPromisesCount = 0
+			let promiseOrder = 0
+
+			const onSettled = (status, payloadVarName, promiseOrder) => {
+				return payload => {
+					result[promiseOrder] = {
+						status,
+						[payloadVarName]: payload
+					}
+					resolvedPromisesCount++
+					if (resolvedPromisesCount === promiseOrder)
+						resolve(result)
+				}
+			}
+
+			for (const perform of iterable) {
+				perform
+					.then(onSettled("resolved", "value", promiseOrder))
+					.catch(onSettled("rejected", "reason", promiseOrder))
+				promiseOrder++
+			}
+		})
+	}
+
+	static race(iterable) {
+		return new Perform((resolve, reject) => {
+			for (const perform of iterable) {
+				perform.then(resolve, reject)
+			}
+		})
+	}
 }
 
 function tryCatch(func, onError = () => {}) {
