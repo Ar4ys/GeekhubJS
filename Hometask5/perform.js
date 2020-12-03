@@ -134,53 +134,72 @@ class Perform {
 	}
 
 	static all(iterable) {
+		if (!isIterable(iterable))
+			throw new TypeError("Argument of Perform.all is not iterable")
+			
 		return new Perform((resolve, reject) => {
 			const result = []
 			let resolvedPromisesCount = 0
-			let promiseOrder = 0
+			let promiseCount = 0
 			for (const perform of iterable) {
-				perform.then(value => {
-					result[promiseOrder] = value
+				(isPromiseLike(perform)
+					? perform
+					: Perform.resolve(perform)
+				).then(value => {
+					result[promiseCount] = value
 					resolvedPromisesCount++
-					if (resolvedPromisesCount === promiseOrder)
+					if (resolvedPromisesCount === promiseCount)
 						resolve(result)
 				}, reject)
-				promiseOrder++
+				promiseCount++
 			}
+			if (promiseCount === 0)
+				resolve(result)
 		})
 	}
 
 	static allSettled(iterable) {
+		if (!isIterable(iterable))
+			throw new TypeError("Argument of Perform.allSettled is not iterable")
+
 		return new Perform((resolve, reject) => {
 			const result = []
 			let resolvedPromisesCount = 0
-			let promiseOrder = 0
+			let promiseCount = 0
 
-			const onSettled = (status, payloadVarName, promiseOrder) => {
+			const onSettled = (status, payloadVarName, promiseCount) => {
 				return payload => {
-					result[promiseOrder] = {
+					result[promiseCount] = {
 						status,
 						[payloadVarName]: payload
 					}
 					resolvedPromisesCount++
-					if (resolvedPromisesCount === promiseOrder)
+					if (resolvedPromisesCount === promiseCount)
 						resolve(result)
 				}
 			}
 
 			for (const perform of iterable) {
-				perform
-					.then(onSettled("resolved", "value", promiseOrder))
-					.catch(onSettled("rejected", "reason", promiseOrder))
-				promiseOrder++
+				(isPromiseLike(perform)
+					? perform
+					: Perform.resolve(perform)
+				).then(onSettled("resolved", "value", promiseCount))
+					.catch(onSettled("rejected", "reason", promiseCount))
+				promiseCount++
 			}
 		})
 	}
 
 	static race(iterable) {
+		if (!isIterable(iterable))
+			throw new TypeError("Argument of Perform.race is not iterable")
+
 		return new Perform((resolve, reject) => {
 			for (const perform of iterable) {
-				perform.then(resolve, reject)
+				(isPromiseLike(perform)
+					? perform
+					: Perform.resolve(perform)
+				).then(resolve, reject)
 			}
 		})
 	}
@@ -194,6 +213,17 @@ function tryCatch(func, onError = () => {}) {
 			onError(e)
 		}
 	}
+}
+
+function isIterable(target) {
+	return target !== undefined
+		&& target !== null
+		&& typeof target[Symbol.iterator] === "function"
+}
+
+function isPromiseLike(target) {
+	return target instanceof Perform
+		|| target instanceof Promise
 }
 
 module.exports = { Perform }
