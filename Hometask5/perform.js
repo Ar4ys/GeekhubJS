@@ -4,13 +4,13 @@ const resolveStack = Symbol("resolveStack")
 const rejectStack = Symbol("rejectStack")
 const finalyStack = Symbol("finalyStack")
 const state = Symbol("state")
-const value = Symbol("value")
-const reason = Symbol("reason")
+const _value = Symbol("value")
+const _reason = Symbol("reason")
 
-module.exports.Perform = class Perform {
+class Perform {
 	constructor(executor) {
 		if (typeof executor !== "function")
-			throw new TypeError("Executor must be a function");
+			throw new TypeError("Executor must be a function")
 
 		this[resolveStack] = []
 		this[rejectStack] = []
@@ -33,14 +33,22 @@ module.exports.Perform = class Perform {
 	 * while resolve and reject - async
 	 */
 	[resolve](value) {
-		const timerId = setTimeout(() => {
-			clearTimeout(timerId)
+		const resolvePreform = value => {
 			if (this[state] !== "pending") return
 			this[state] = "resolved"
-			this[value] = value
+			this[_value] = value
 			this[finalyStack].forEach((callback) => callback())
 			this[resolveStack].forEach((callback) => callback(value))
-		}, 0)
+		}
+
+		if (value instanceof Perform || value instanceof Promise)
+			value.then(resolvePreform, this[reject].bind(this))
+		else {
+			const timerId = setTimeout(() => {
+				clearTimeout(timerId)
+				resolvePreform(value)
+			}, 0)
+		}
 	}
 
 	[reject](reason) {
@@ -48,7 +56,7 @@ module.exports.Perform = class Perform {
 			clearTimeout(timerId)
 			if (this[state] !== "pending") return
 			this[state] = "rejected"
-			this[reason] = reason
+			this[_reason] = reason
 			this[finalyStack].forEach((callback) => callback())
 			if (this[rejectStack].length === 0)
 				console.error("Uncaught (in perform):", reason)
@@ -75,9 +83,9 @@ module.exports.Perform = class Perform {
 				this[resolveStack].push(value => resolve(onResolved(value)))
 				this[rejectStack].push(resolveOrReject)
 			} else if (this[state] === "resolved")
-				resolve(onResolved(this[value]))
+				resolve(onResolved(this[_value]))
 			else if (this[state] === "rejected")
-				resolveOrReject(this[reason])
+				resolveOrReject(this[_reason])
 		})
 
 		return nextPerform
@@ -85,18 +93,19 @@ module.exports.Perform = class Perform {
 
 	catch(onRejected) {
 		if (typeof onRejected !== "function")
-			throw new TypeError("Callback 'onRejected' must be a function");
+			throw new TypeError("Callback 'onRejected' must be a function")
 
 		const nextPerform = new Perform((resolve, reject) => {
 			onRejected = tryCatch(onRejected, reject)
 			const resolveOnRejected = reason => resolve(onRejected(reason))
+
 			if (this[state] === "pending") {
 				this[resolveStack].push(resolve)
 				this[rejectStack].push(resolveOnRejected)
 			} else if (this[state] === "resolved")
-				resolve(this[value])
+				resolve(this[_value])
 			else if (this[state] === "rejected")
-				resolveOnRejected(reason)
+				resolveOnRejected(this[_reason])
 		})
 
 		return nextPerform
@@ -104,8 +113,7 @@ module.exports.Perform = class Perform {
 
 	finally(onFinally) {
 		if (typeof onFinally !== "function")
-			throw new TypeError("Callback 'onFinally' must be a function");
-
+			throw new TypeError("Callback 'onFinally' must be a function")
 
 		const nextPerform = new Perform((resolve, reject) => {
 			onFinally = tryCatch(onFinally, reject)
@@ -116,10 +124,10 @@ module.exports.Perform = class Perform {
 				this[finalyStack].push(onFinally)
 			} else if (this[state] === "resolved") {
 				onFinally()
-				resolve(this[value])
+				resolve(this[_value])
 			} else if (this[state] === "rejected") {
 				onFinally()
-				reject(this[reason])
+				reject(this[_reason])
 			}			
 		})
 
@@ -136,3 +144,5 @@ function tryCatch(func, onError = () => {}) {
 		}
 	}
 }
+
+module.exports = { Perform }
