@@ -30,10 +30,16 @@ const l = console.log
 	// .catch(a => (l("(catch after finally)"/, a), "catched"))
 // l("After promise")
 
-new Promise(resolve => resolve(new Perform(resolve => resolve(1))))
-	.then(a => (l("then", a), Promise.reject(2)))
-	.catch(a => (l("catch", a), new Perform(a => a(3))))
-	.then(a => l("then", a))
+new Promise(resolve => resolve(Perform.resolve(1)))
+	.then(a => {
+		console.log("then", a)
+		return Promise.reject(2)
+	})
+	.catch(a => {
+		console.log("catch", a)
+		return Promise.resolve(3)
+	})
+	.then(a => console.log("then", a))
 
 
 /* *1 */
