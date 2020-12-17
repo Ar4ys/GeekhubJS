@@ -53,11 +53,19 @@ function fibonacci(num) {
 }
 
 // 4. isSorted - Returns true or false, indicating whether the given array of numbers is sorted.
+isSorted = log(isSorted, "isSorted:")
 isSorted([])                        // true
 isSorted([-Infinity, -5, 0, 3, 9])  // true
 isSorted([3, 9, -3, 10])            // false
 
-function isSorted() {}
+function isSorted(array) {
+	for (let i = 0; i < array.length; i++) {
+		if (array[i] > array[i+1])
+			return false
+	}
+
+	return true
+}
 
 // 5. reverse - Reverses the given string (yes, using the built in reverse function is cheating).
 reverse('')                         // ''
