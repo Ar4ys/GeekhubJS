@@ -68,10 +68,16 @@ function isSorted(array) {
 }
 
 // 5. reverse - Reverses the given string (yes, using the built in reverse function is cheating).
+reverse = log(reverse, "reverse:")
 reverse('')                         // ''
 reverse('abcdef')                   // 'fedcba'
 
-function reverse() {}
+function reverse(str) {
+	return str
+		.split("")
+		.map((_, i, arr) => arr[arr.length-i-1])
+		.join("")
+}
 
 // 6. indexOf - Implement the indexOf function for arrays.
 indexOf([1, 2, 3], 1)               // 0
