@@ -1,11 +1,11 @@
-const log = (fun) => (...args) => {
+const log = (fun, ...logData) => (...args) => {
 	const result = fun(...args)
-	console.log(result)
+	console.log(...logData, result)
 	return result
 }
 
 // 1. isPrime - Returns true or false, indicating whether the given number is prime.
-isPrime = log(isPrime)
+isPrime = log(isPrime, "isPrime:")
 isPrime(0)                          // false
 isPrime(1)                          // false
 isPrime(17)                         // true
@@ -25,7 +25,7 @@ const factorial = log(function fact(num) {
 		return 1
 	else
 		return num * fact(--num)
-})
+}, "factorial:")
 
 factorial(0)                        // 1
 factorial(1)                        // 1
@@ -33,12 +33,24 @@ factorial(6)                        // 720
 
 
 // 3. fib - Returns the nth Fibonacci number.
+fib = log(fibonacci, "fibonacci:")
 fib(0)                              // 0
 fib(1)                              // 1
 fib(10)                             // 55
 fib(20)                             // 6765
 
-function fib() {}
+function fibonacci(num) {
+	let a = 0
+	let b = 1
+
+	for (let i = 0; i < num; i++) {
+		let c = b
+		b += a
+		a = c
+	}
+
+	return a
+}
 
 // 4. isSorted - Returns true or false, indicating whether the given array of numbers is sorted.
 isSorted([])                        // true
