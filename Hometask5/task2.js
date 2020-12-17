@@ -20,11 +20,17 @@ function isPrime(num) {
 }
 
 // 2. factorial - Returns a number that is the factorial of the given number.
+const factorial = log(function fact(num) {
+	if (num <= 0)
+		return 1
+	else
+		return num * fact(--num)
+})
+
 factorial(0)                        // 1
 factorial(1)                        // 1
 factorial(6)                        // 720
 
-function factorial() {}
 
 // 3. fib - Returns the nth Fibonacci number.
 fib(0)                              // 0
