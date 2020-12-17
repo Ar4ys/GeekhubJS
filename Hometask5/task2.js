@@ -80,10 +80,17 @@ function reverse(str) {
 }
 
 // 6. indexOf - Implement the indexOf function for arrays.
+indexOf = log(indexOf, "indexOf:")
 indexOf([1, 2, 3], 1)               // 0
 indexOf([1, 2, 3], 4)               // -1
 
-function indexOf() {}
+function indexOf(arr, target) {
+	for (let i = 0; i < arr.length; i++)
+		if (arr[i] === target)
+			return i
+
+	return -1
+}
 
 // 7. isPalindrome - Return true or false indicating whether the given string is a plaindrone (case and space insensitive).
 isPalindrome('')                                // true
