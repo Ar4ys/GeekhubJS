@@ -93,12 +93,17 @@ function indexOf(arr, target) {
 }
 
 // 7. isPalindrome - Return true or false indicating whether the given string is a plaindrone (case and space insensitive).
+isPalindrome = log(isPalindrome, "isPalindrome:")
 isPalindrome('')                                // true
 isPalindrome('abcdcba')                         // true
 isPalindrome('abcd')                            // false
 isPalindrome('A man a plan a canal Panama')     // true
 
-function isPalindrome() {}
+function isPalindrome(str) {
+	const preparedString = str.toLowerCase().replace(/ /g, "")
+	const palindromedString = preparedString.split("").reverse().join("")
+	return preparedString === palindromedString
+}
 
 // 8. missing - Takes an unsorted array of unique numbers (ie. no repeats) from 1 through some number n, and returns the missing number in the sequence (there are either no missing numbers, or exactly one missing number). Can you do it in O(N) time? Hint: There’s a clever formula you can use.
 missing([])                         // undefined
