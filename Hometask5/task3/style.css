@@ -1,0 +1,51 @@
+body {
+	color:  white;
+}
+
+.content {
+	position: relative;
+	background-image: url("./image.jpg");
+	width: 512px;
+	height: 512px;
+	border: 1px solid black;
+	margin: 0 auto;
+}
+
+.tag {
+	position: absolute;
+	left: 30%;
+}
+
+.tag span,
+.tag button {
+	border-radius: 6px;
+}
+
+.tag span {
+	display: block;
+	background: #343432;
+	padding: 5px 15px;
+	white-space: nowrap;
+	user-select: none;
+}
+
+.tag button {
+	position: absolute;
+	background: #b01030;
+	padding: 5px 10px;
+	border: none;
+	cursor: pointer;
+	top: 0;
+}
+
+.tag button.right {
+	left: 100%;
+}
+
+.tag button.left {
+	right: 100%;
+}
+
+.hidden {
+	visibility: hidden;
+}
