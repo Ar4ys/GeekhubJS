@@ -127,6 +127,7 @@ function missing(arr) {
 }
 
 // 9. isBalanced - Takes a string and returns true or false indicating whether its curly braces are balanced.
+isBalanced = log(isBalanced, "isBalanced:")
 isBalanced('}{')                      // false
 isBalanced('{{}')                     // false
 isBalanced('{}{}')                    // false
@@ -134,4 +135,15 @@ isBalanced('foo { bar { baz } boo }') // true
 isBalanced('foo { bar { baz }')       // false
 isBalanced('foo { bar } }')           // false
 
-function isBalanced() {}
+function isBalanced(input) {
+	let string = input.match(/[{}]/g).join("")
+	while (string !== null) {
+		if (string === "{}")
+			return true
+
+		const match = string.match(/{(.+)}/)
+		string = match && match[1]
+	}
+
+	return false
+}
