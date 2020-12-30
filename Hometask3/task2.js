@@ -71,12 +71,13 @@ function defineField(object, fieldName) {
 		{
 			get: () => storedValue,
 			set: value => {
-				if (value > 100)
+				if (value > 100) {
 					storedValue = 100
-				else if (value < 0)
+				} else if (value < 0) {
 					storedValue = 0
-				else
+				} else {
 					storedValue = value
+				}
 			}
 		}
 	);
