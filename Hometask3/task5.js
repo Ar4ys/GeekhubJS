@@ -37,21 +37,21 @@ Array.prototype.mySort = function(callback) {
 		sortFunc = defaultSortFunc
 	}
 
-    if (typeof sortFunc !== "function") {
-        throw new TypeError("callback must be a function")
-    }
+	if (typeof sortFunc !== "function") {
+		throw new TypeError("callback must be a function")
+	}
 
-    let wasSorted = false
-    do {
-    	wasSorted = false
-	    for (let i = 1; i < this.length; i++) {
+	let wasSorted = false
+	do {
+		wasSorted = false
+		for (let i = 1; i < this.length; i++) {
 			const result = sortFunc(this[i-1], this[i])
 			if (result > 0) {
 				wasSorted = true
 				swap(this, i-1, i)
 			}
 		}
-    } while (wasSorted)
+	} while (wasSorted)
 
 	return this
 }
