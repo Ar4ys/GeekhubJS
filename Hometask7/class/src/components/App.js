@@ -2,6 +2,7 @@ import { Component } from "react"
 import "../styles/App.css"
 import { Item } from "./Item"
 import * as Button from "./IconButtons"
+import { Checkbox } from "./Checkbox"
 
 export class App extends Component {
   state = {
@@ -22,6 +23,7 @@ export class App extends Component {
         Hello world
         <Item>Hello there</Item>
         <Button.Accept />
+        <Checkbox />
       </main>
     </>
   }
