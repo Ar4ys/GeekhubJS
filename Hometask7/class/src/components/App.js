@@ -1,6 +1,7 @@
 import { Component } from "react"
 import "../styles/App.css"
 import { TodoForm } from "./TodoForm"
+import { TodoItem } from "./TodoItem"
 
 export class App extends Component {
   state = {
@@ -19,6 +20,8 @@ export class App extends Component {
     return <>
       <main className={className}>
         <TodoForm />
+        <TodoItem text="Hello world!"/>
+        <TodoItem text="Goodbye world!" done/>
       </main>
     </>
   }
