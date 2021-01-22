@@ -1,8 +1,6 @@
 import { Component } from "react"
 import "../styles/App.css"
-import { Item } from "./Item"
-import * as Button from "./IconButtons"
-import { Checkbox } from "./Checkbox"
+import { TodoForm } from "./TodoForm"
 
 export class App extends Component {
   state = {
@@ -20,10 +18,7 @@ export class App extends Component {
 
     return <>
       <main className={className}>
-        Hello world
-        <Item>Hello there</Item>
-        <Button.Accept />
-        <Checkbox />
+        <TodoForm />
       </main>
     </>
   }
