@@ -1,27 +1,29 @@
 import { Component } from "react"
-import "../styles/App.css"
 import { TodoForm } from "./TodoForm"
 import { TodoItem } from "./TodoItem"
+import { store } from "../store/Store"
+import "../styles/App.css"
 
 export class App extends Component {
-  state = {
-    darkTheme: true
+  constructor() {
+    super(...arguments)
+    this.state = store.init()
+  }
+
+  componentDidMount() {
+    store.subscribe(newStore => this.setState(newStore))
   }
 
   toggleDarkTheme(state) {
-    this.setState({
-      darkTheme: state ?? !this.state.darkTheme
-    })
+    store.toggleDarkTheme(state ?? !this.state.darkTheme)
   }
 
   render() {
     const className = this.state.darkTheme ? "dark-theme" : ""
-
     return <>
       <main className={className}>
         <TodoForm />
-        <TodoItem text="Hello world!"/>
-        <TodoItem text="Goodbye world!" done/>
+        {this.state.todos.map(todo => <TodoItem key={todo.id} {...todo}/>)}
       </main>
     </>
   }

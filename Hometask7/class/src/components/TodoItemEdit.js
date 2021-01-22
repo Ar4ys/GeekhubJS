@@ -44,7 +44,7 @@ export class TodoItemEdit extends Component {
           placeholder="Type some todo..."
           autoFocus
         />
-        <Button.Accept onClick={() => this.props.onAccept({ text, color })}/>
+        <Button.Accept onClick={() => this.props.onAccept(this.state)}/>
         <Button.Cancel onClick={this.props.onCancel}/>
       </Item>
     </>

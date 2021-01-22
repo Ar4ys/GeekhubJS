@@ -1,6 +1,7 @@
 import { Component } from "react"
 import { TodoItemView } from "./TodoItemView"
 import { TodoItemEdit } from "./TodoItemEdit"
+import { store } from "../store/Store"
 
 export class TodoItem extends Component {
   constructor({ editing }) {
@@ -14,13 +15,14 @@ export class TodoItem extends Component {
   }
 
   updateTodo(todo) {
-    const { store, id } = this.props
-    store.update(id, todo)
+    const { id } = this.props
+    store.updateTodo(id, todo)
+    this.toggleEditing(false)
   }
 
   deleteTodo() {
-    const { store, id } = this.props
-    store.delete(id)
+    const { id } = this.props
+    store.deleteTodo(id)
   }
 
   toggleIsDone(state) {
