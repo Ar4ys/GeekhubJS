@@ -14,10 +14,15 @@
 	border: none;
 }
 
-.icon-button:before {
+.icon-button {
 	opacity: .5;
 }
 
-.icon-button:hover:before {
+.icon-button:hover {
 	opacity: 1;
+	cursor: pointer;
+}
+
+.icon-button:active {
+	opacity: .5;
 }

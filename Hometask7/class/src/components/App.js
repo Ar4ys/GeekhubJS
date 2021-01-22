@@ -1,7 +1,7 @@
 import { Component } from "react"
 import "../styles/App.css"
 import { Item } from "./Item"
-import { AcceptButton } from "./CustomButtons"
+import * as Button from "./IconButtons"
 
 export class App extends Component {
   state = {
@@ -21,7 +21,7 @@ export class App extends Component {
       <main className={className}>
         Hello world
         <Item>Hello there</Item>
-        <AcceptButton className="hello">Hello here</AcceptButton>
+        <Button.Accept />
       </main>
     </>
   }
