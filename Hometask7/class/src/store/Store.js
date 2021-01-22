@@ -26,7 +26,18 @@ class Store extends EventEmiter {
 
   addTodo(todo) {
     const todos = this.getAllTodos()
-    todos.push({...todo, id: this.lastTodoId++})
+    const todoTemlate = {
+      text: "",
+      color: "default",
+      done: false
+    }
+
+    todos.push({
+      ...todoTemlate,
+      ...todo,
+      id: this.lastTodoId++
+    })
+    
     LocalStorage.setItem("todos", todos)
     this.emit()
     return this.lastTodoId-1

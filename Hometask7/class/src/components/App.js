@@ -22,7 +22,7 @@ export class App extends Component {
     const className = this.state.darkTheme ? "dark-theme" : ""
     return <>
       <main className={className}>
-        <TodoForm />
+        <TodoForm toggleDarkTheme={this.toggleDarkTheme.bind(this)}/>
         {this.state.todos.map(todo => <TodoItem key={todo.id} {...todo}/>)}
       </main>
     </>
