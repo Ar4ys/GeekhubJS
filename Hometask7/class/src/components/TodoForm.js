@@ -1,18 +1,26 @@
 import { Component } from "react"
 import { Item } from "./Item"
 import * as Button from "./IconButtons"
+import { ColorPicker } from "./ColorPicker"
 import { store } from "../store/Store"
+import { allColors } from "../utils"
 import "../styles/TodoItem.css"
 
 export class TodoForm extends Component {
   state = {
     text: "",
-    color: "default"
+    color: "default",
+    colorPickerOpened: false
   }
 
   setText({ target }) {
     const { value } = target
     this.setState({ text: value })
+  }
+
+  setColor(color) {
+    this.setState({ color })
+    this.hideColorPicker()
   }
 
   onKeyPress({ key }) {
@@ -21,17 +29,34 @@ export class TodoForm extends Component {
   }
 
   addTodo() {
-    store.addTodo(this.state)
+    const { text, color } = this.state
+    store.addTodo({ text, color })
     this.setState({ text: "", color: "default" })
   }
 
+  openColorPicker() {
+    this.setState({ colorPickerOpened: true })
+  }
+
+  hideColorPicker() {
+    this.setState({ colorPickerOpened: false })
+  }
+
   render() {
-    const { text, color } = this.state
+    const { text, color, colorPickerOpened } = this.state
     const darkTheme = store.getDarkThemeState()
 
     return <>
-      <Item>
-        <Button.ColorPicker />
+      <Item className={`todo-form ${color}`}>
+        <Button.ColorPicker onClick={this.openColorPicker.bind(this)} />
+        {colorPickerOpened
+          ? <ColorPicker
+              colors={allColors}
+              color={color}
+              onSelect={this.setColor.bind(this)}
+              onBlur={this.hideColorPicker.bind(this)}
+            />
+          : undefined}
         <input
           type="text"
           value={text}

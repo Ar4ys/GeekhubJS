@@ -3,6 +3,7 @@ import { TodoForm } from "./TodoForm"
 import { TodoItem } from "./TodoItem"
 import { store } from "../store/Store"
 import "../styles/App.css"
+import "../styles/Colors.css"
 
 export class App extends Component {
   constructor() {

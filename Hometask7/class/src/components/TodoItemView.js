@@ -9,7 +9,7 @@ const onDoneTodo = callback =>
 
 export function TodoItemView({ text, color, done, onDone, onEdit, onDelete }) {
   return <>
-    <Item className={done ? "done" : ""}>
+    <Item className={color + " " + (done ? "done" : "")}>
       <Checkbox checked={done} onChange={onDoneTodo(onDone)}/>
       <p>{text}</p>
       <Edit onClick={onEdit}/>

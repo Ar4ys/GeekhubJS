@@ -1,15 +1,22 @@
 import { Component } from "react"
 import { Item } from "./Item"
 import * as Button from "./IconButtons"
+import { ColorPicker } from "./ColorPicker"
+import { allColors } from "../utils"
 
 export class TodoItemEdit extends Component {
   constructor({ text, color }) {
     super(...arguments)
-    this.state = { text, color }
+    this.state = {
+      text,
+      color,
+      colorPickerOpened: false
+    }
   }
 
   setColor(color) {
     this.setState({ color })
+    this.hideColorPicker()
   }
 
   setText({ target }) {
@@ -31,11 +38,27 @@ export class TodoItemEdit extends Component {
     }
   }
 
+  openColorPicker() {
+    this.setState({ colorPickerOpened: true })
+  }
+
+  hideColorPicker() {
+    this.setState({ colorPickerOpened: false })
+  }
+
   render() {
-    const { text, color } = this.state
+    const { text, color, colorPickerOpened } = this.state
     return <>
-      <Item>
-        <Button.ColorPicker />
+      <Item className={color}>
+        <Button.ColorPicker onClick={this.openColorPicker.bind(this)} />
+        {colorPickerOpened
+          ? <ColorPicker
+              colors={allColors}
+              color={color}
+              onSelect={this.setColor.bind(this)}
+              onBlur={this.hideColorPicker.bind(this)}
+            />
+          : undefined}
         <input
           type="text"
           value={text}

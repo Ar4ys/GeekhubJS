@@ -19,3 +19,10 @@ export class EventEmiter {
       callback()
   }
 }
+
+export const allColors = [
+  "default", "red", "orange",
+  "yellow", "green", "blue-green",
+  "blue", "dark-blue", "purple",
+  "pink", "brown", "grey"
+]

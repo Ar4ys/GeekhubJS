@@ -1,3 +1,9 @@
+.todo-form {
+	position: sticky;
+	top: 10px;
+	z-index: 1;
+}
+
 div.item > p,
 input[type="text"] {
 	flex-grow: 2;
