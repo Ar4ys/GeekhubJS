@@ -10,7 +10,7 @@ class Store extends EventEmiter {
 
   init() {
     LocalStorage.getItem("darkTheme")
-    ?? LocalStorage.setItem("darkTheme", true)
+    ?? LocalStorage.setItem("darkTheme", false)
 
     LocalStorage.getItem("todos")
     ?? LocalStorage.setItem("todos", [])
@@ -35,12 +35,12 @@ class Store extends EventEmiter {
     todos.push({
       ...todoTemlate,
       ...todo,
-      id: this.lastTodoId++
+      id: ++this.lastTodoId
     })
     
     LocalStorage.setItem("todos", todos)
     this.emit()
-    return this.lastTodoId-1
+    return this.lastTodoId
   }
 
   updateTodo(id, value) {
