@@ -1,47 +1,25 @@
-import { Component } from "react"
+import { useState } from "react"
 import { TodoItemView } from "./TodoItemView"
 import { TodoItemEdit } from "./TodoItemEdit"
 import { store } from "../store/Store"
 
-export class TodoItem extends Component {
-  constructor({ editing }) {
-    super(...arguments)
-    this.state = { editing }
-  }
-
-  toggleEditing(state) {
-    const { editing } = this.state
-    this.setState({ editing: state ?? !editing})
-  }
-
-  updateTodo(todo) {
-    const { id } = this.props
+export function TodoItem({ id, editing, text, color, done }) {
+  const [ isEditing, setEditing ] = useState(editing)
+  const updateTodo = todo => {
     store.updateTodo(id, todo)
-    this.toggleEditing(false)
+    setEditing(false)
   }
-
-  deleteTodo() {
-    const { id } = this.props
-    store.deleteTodo(id)
-  }
-
-  toggleIsDone(state) {
-    this.updateTodo({ done: state })
-  }
-
-  render() {
-    const { text, color, done } = this.props
-    return this.state.editing
-      ? <TodoItemEdit
-          onCancel={this.toggleEditing.bind(this, false)}
-          onAccept={this.updateTodo.bind(this)}
-          {...{ text, color }}
-        /> 
-      : <TodoItemView
-          onEdit={this.toggleEditing.bind(this, true)}
-          onDelete={this.deleteTodo.bind(this)}
-          onDone={this.toggleIsDone.bind(this)}
-          {...{ text, color, done }}
-        /> 
-  }
+  
+  return isEditing
+    ? <TodoItemEdit
+        onCancel={() => setEditing(false)}
+        onAccept={updateTodo}
+        {...{ text, color }}
+      /> 
+    : <TodoItemView
+        onEdit={() => setEditing(true)}
+        onDelete={() => store.deleteTodo(id)}
+        onDone={state => updateTodo({ done: state })}
+        {...{ text, color, done }}
+      />
 }

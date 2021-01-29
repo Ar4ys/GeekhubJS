@@ -1,31 +1,30 @@
-import { Component } from "react"
+import { useState, useEffect } from "react"
 import { TodoForm } from "./TodoForm"
 import { TodoItem } from "./TodoItem"
 import { store } from "../store/Store"
 import "../styles/App.css"
 import "../styles/Colors.css"
 
-export class App extends Component {
-  constructor() {
-    super(...arguments)
-    this.state = store.init()
-  }
+export function App() {
+  const [ state, setState ] = useState(store.init())
+  useEffect(() => {
+    const id = store.subscribe(newStore =>
+      setState(previousStore => ({...previousStore, ...newStore}))
+    )
 
-  componentDidMount() {
-    store.subscribe(newStore => this.setState(newStore))
-  }
+    return () => store.unsubscribe(id)
+  }, [])
 
-  toggleDarkTheme(state) {
+  const toggleDarkTheme = state => {
     store.toggleDarkTheme(state ?? !this.state.darkTheme)
   }
 
-  render() {
-    const className = this.state.darkTheme ? "dark-theme" : ""
-    return <>
-      <main className={className}>
-        <TodoForm toggleDarkTheme={this.toggleDarkTheme.bind(this)}/>
-        {this.state.todos.map(todo => <TodoItem key={todo.id} {...todo}/>)}
-      </main>
-    </>
-  }
+  const className = state.darkTheme ? "dark-theme" : ""
+  return <>
+    <main className={className}>
+      <TodoForm toggleDarkTheme={toggleDarkTheme}/>
+      {state.todos.map(todo => <TodoItem key={todo.id} {...todo}/>)}
+    </main>
+  </>
 }
+
