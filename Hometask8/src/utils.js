@@ -16,7 +16,7 @@ export class EventEmiter {
 
   emit() {
     for (const callback of this.listeners)
-      callback()
+      callback?.()
   }
 }
 
