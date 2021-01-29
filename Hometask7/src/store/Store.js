@@ -21,7 +21,7 @@ class Store extends EventEmiter {
   emit() {
     const newStore = LocalStorage.getStorage()
     for (const callback of this.listeners)
-      callback(newStore)
+      callback?.(newStore)
   }
 
   addTodo(todo) {
