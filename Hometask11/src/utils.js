@@ -1,23 +1,13 @@
-export class EventEmiter {
-  constructor(listeners = []) {
-    if (!Array.isArray(listeners))
-      throw new TypeError("First argument must be an array of functions")
+export const copy = target => 
+  JSON.parse(JSON.stringify(target))
 
-    this.listeners = listeners
-  }
+export const createReducer = reducers => (state, action) => {
+  const newState = copy(state)
+  for (const [ type, reducer ] of Object.entries(reducers))
+    if (action.type === type)
+      return reducer(newState, action.payload)
 
-  subscribe(callback) {
-    return this.listeners.push(callback) - 1
-  }
-
-  unsubscribe(id) {
-    delete this.listeners[id]
-  }
-
-  emit() {
-    for (const callback of this.listeners)
-      callback?.()
-  }
+  return state
 }
 
 export const allColors = [
@@ -25,4 +15,5 @@ export const allColors = [
   "yellow", "green", "blue-green",
   "blue", "dark-blue", "purple",
   "pink", "brown", "grey"
+
 ]
