@@ -1,21 +1,24 @@
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { addTodo as addTodoAction, toggleDarkTheme } from "../store/actions"
 import { Item } from "./Item"
 import * as Button from "./IconButtons"
 import { ColorPicker } from "./ColorPicker"
-import { store } from "../store/Store"
 import { allColors } from "../utils"
 import "../styles/TodoItem.css"
 
-export function TodoForm({ toggleDarkTheme }) {
+export function TodoForm() {
   const [ text, setText ] = useState("")
   const [ color, setColor ] = useState("default")
   const [
     isColorPickerOpened,
     setColorPickerState
   ] = useState(false)
+  const darkTheme = useSelector(state => state.darkTheme)
+  const dispatch = useDispatch()
 
   const addTodo = () => {
-    store.addTodo({ text, color })
+    dispatch(addTodoAction(text, color))
     setText("")
     setColor("default")
   }
@@ -23,7 +26,6 @@ export function TodoForm({ toggleDarkTheme }) {
   const onKeyPress = ({ key }) =>
     key === "Enter" && addTodo()
 
-  const darkTheme = store.getDarkThemeState()
   return <>
     <Item className={`todo-form ${color}`}>
       <Button.ColorPicker onClick={() => setColorPickerState(true)} />
@@ -45,8 +47,8 @@ export function TodoForm({ toggleDarkTheme }) {
       />
       <Button.Accept onClick={addTodo}/>
       {darkTheme
-        ? <Button.LightTheme onClick={() => toggleDarkTheme(false)}/>
-        : <Button.DarkTheme onClick={() => toggleDarkTheme(true)}/>}
+        ? <Button.LightTheme onClick={() => dispatch(toggleDarkTheme(false))}/>
+        : <Button.DarkTheme onClick={() => dispatch(toggleDarkTheme(true))}/>}
     </Item>
   </>
 }

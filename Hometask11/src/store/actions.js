@@ -10,9 +10,9 @@ export const toggleDarkTheme = state => ({
   payload: state
 })
 
-export const addTodo = (content, color) => ({
+export const addTodo = (text, color) => ({
   type: ADD_TODO,
-  payload: { content, color }
+  payload: { text, color }
 })
 
 export const updateTodo = (id, todo) => ({

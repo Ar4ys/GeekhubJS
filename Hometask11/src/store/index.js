@@ -1,13 +1,13 @@
 import { createStore } from "redux"
 import rootReducer from "./reducers"
-import { loadState } from "./localStorage"
+import { loadState, saveState } from "./localStorage"
 
 const initialStore = {
   todos: [],
   darkTheme: false
 }
 
-const persistedState = loadState(initialStore)
+const persistedState = loadState()
 const store = createStore(
   rootReducer,
   persistedState

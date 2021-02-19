@@ -1,7 +1,6 @@
 import { createReducer } from "../../utils"
 import { TOGGLE_DARKTHEME } from "../actionTypes"
 
-export default createReducer({
-  [TOGGLE_DARKTHEME]: (state, darkTheme) =>
-    state.darkTheme = darkTheme
+export default createReducer({ darkTheme: false }, {
+  [TOGGLE_DARKTHEME]: (state, darkTheme) => darkTheme ?? !state
 })

@@ -1,7 +1,9 @@
-export const copy = target => 
-  JSON.parse(JSON.stringify(target))
+export const copy = target => {
+  // console.log(target)
+  return JSON.parse(JSON.stringify(target))
+}
 
-export const createReducer = reducers => (state, action) => {
+export const createReducer = (init, reducers) => (state = init, action) => {
   const newState = copy(state)
   for (const [ type, reducer ] of Object.entries(reducers))
     if (action.type === type)

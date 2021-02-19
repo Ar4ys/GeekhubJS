@@ -1,12 +1,14 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { updateTodo as updateTodoAction, deleteTodo } from "../store/actions"
 import { TodoItemView } from "./TodoItemView"
 import { TodoItemEdit } from "./TodoItemEdit"
-import { store } from "../store/Store"
 
 export function TodoItem({ id, editing, text, color, done }) {
   const [ isEditing, setEditing ] = useState(editing)
+  const dispatch = useDispatch()
   const updateTodo = todo => {
-    store.updateTodo(id, todo)
+    dispatch(updateTodoAction(id, todo))
     setEditing(false)
   }
   
@@ -18,7 +20,7 @@ export function TodoItem({ id, editing, text, color, done }) {
       /> 
     : <TodoItemView
         onEdit={() => setEditing(true)}
-        onDelete={() => store.deleteTodo(id)}
+        onDelete={() => dispatch(deleteTodo(id))}
         onDone={state => updateTodo({ done: state })}
         {...{ text, color, done }}
       />
